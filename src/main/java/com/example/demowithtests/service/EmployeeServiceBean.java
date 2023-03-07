@@ -2,6 +2,7 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.exception.ResourceNotAvailableException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
@@ -33,13 +34,16 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        var employee = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull();
+        employee.forEach(this::changeFiredStatus);
+        return employee;
     }
 
     @Override
     public Page<Employee> getAllWithPagination(Pageable pageable) {
         log.debug("getAllWithPagination() - start: pageable = {}", pageable);
-        Page<Employee> list = employeeRepository.findAll(pageable);
+        Page<Employee> list = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull(pageable);
+        list.forEach(this::changeFiredStatus);
         log.debug("getAllWithPagination() - end: list = {}", list);
         return list;
     }
@@ -47,12 +51,19 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public Employee getById(Integer id) {
         var employee = employeeRepository.findById(id)
-                // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceNotFoundException::new);
-         /*if (employee.getIsDeleted()) {
-            throw new EntityNotFoundException("Employee was deleted with id = " + id);
-        }*/
+        changeFiredStatus(employee);
+        if (employee.getFired() == Boolean.TRUE) {
+            throw new ResourceNotAvailableException("Employee with this id was fired");
+        }
         return employee;
+    }
+
+    public void changeFiredStatus(Employee employee) {
+        if (employee.getFired() == null) {
+        employee.setFired(Boolean.FALSE);
+        employeeRepository.save(employee);
+        }
     }
 
     @Override
@@ -62,6 +73,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
+                    entity.setFired(employee.getFired());
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -93,7 +105,7 @@ public class EmployeeServiceBean implements EmployeeService {
         // create Pageable object using the page, size and sort details
         Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
         // fetch the page object by additionally passing pageable with the filters
-        return employeeRepository.findByCountryContaining(country, pageable);
+        return employeeRepository.findByCountryContainingAndIsFiredIsFalse(country, pageable);
     }
 
     private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
@@ -113,7 +125,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<String> getAllEmployeeCountry() {
         log.info("getAllEmployeeCountry() - start:");
-        List<Employee> employeeList = employeeRepository.findAll();
+        List<Employee> employeeList = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull();
         List<String> countries = employeeList.stream()
                 .map(country -> country.getCountry())
                 .collect(Collectors.toList());
@@ -128,7 +140,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<String> getSortCountry() {
-        List<Employee> employeeList = employeeRepository.findAll();
+        List<Employee> employeeList = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull();
         return employeeList.stream()
                 .map(Employee::getCountry)
                 .filter(c -> c.startsWith("U"))
@@ -138,7 +150,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Optional<String> findEmails() {
-        var employeeList = employeeRepository.findAll();
+        var employeeList = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull();
 
         var emails = employeeList.stream()
                 .map(Employee::getEmail)

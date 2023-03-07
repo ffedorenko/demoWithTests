@@ -30,4 +30,6 @@ public class EmployeeDto {
     public Set<AddressDto> addresses = new HashSet<>();
 
     public Gender gender;
+
+    public Boolean isFired = Boolean.FALSE;
 }

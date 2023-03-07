@@ -25,6 +25,8 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    private Boolean isFired = Boolean.FALSE;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -74,5 +76,13 @@ public class Employee {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Boolean getFired() {
+        return isFired;
+    }
+
+    public void setFired(Boolean fired) {
+        isFired = fired;
     }
 }

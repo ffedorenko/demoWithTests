@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(ResourceNotAvailableException.class)
+    public ResponseEntity<?> resourceNotAvailableException(ResourceNotAvailableException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
     @Data
     @AllArgsConstructor
     private static class MyGlobalExceptionHandler {
