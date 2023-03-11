@@ -2,6 +2,7 @@ package com.example.demowithtests.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class Employee {
 
     @Id
@@ -25,64 +27,9 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    @Builder.Default
     private Boolean isFired = Boolean.FALSE;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Set<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public Boolean getFired() {
-        return isFired;
-    }
-
-    public void setFired(Boolean fired) {
-        isFired = fired;
-    }
 }

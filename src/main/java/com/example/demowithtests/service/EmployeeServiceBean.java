@@ -53,15 +53,15 @@ public class EmployeeServiceBean implements EmployeeService {
         var employee = employeeRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         changeFiredStatus(employee);
-        if (employee.getFired() == Boolean.TRUE) {
+        if (employee.getIsFired() == Boolean.TRUE) {
             throw new ResourceNotAvailableException("Employee with this id was fired");
         }
         return employee;
     }
 
     public void changeFiredStatus(Employee employee) {
-        if (employee.getFired() == null) {
-        employee.setFired(Boolean.FALSE);
+        if (employee.getIsFired() == null) {
+        employee.setIsFired(Boolean.FALSE);
         employeeRepository.save(employee);
         }
     }
@@ -73,7 +73,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     entity.setName(employee.getName());
                     entity.setEmail(employee.getEmail());
                     entity.setCountry(employee.getCountry());
-                    entity.setFired(employee.getFired());
+                    entity.setIsFired(employee.getIsFired());
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -127,7 +127,7 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("getAllEmployeeCountry() - start:");
         List<Employee> employeeList = employeeRepository.findAllByIsFiredIsFalseOrIsFiredIsNull();
         List<String> countries = employeeList.stream()
-                .map(country -> country.getCountry())
+                .map(Employee::getCountry)
                 .collect(Collectors.toList());
         /*List<String> countries = employeeList.stream()
                 .map(Employee::getCountry)
