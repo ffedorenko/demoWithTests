@@ -52,4 +52,6 @@ public interface EmployeeService {
     Optional<String> findEmails();
 
     void createOneThousandEntities();
+
+    void updateOneThousandEntities(Employee employee);
 }

@@ -15,12 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static java.util.Objects.nonNull;
 
 @AllArgsConstructor
 @Slf4j
@@ -70,12 +68,22 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee updateById(Integer id, Employee employee) {
+        log.info("updateById(Integer id, Employee employee) Service Start id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    entity.setFired(employee.getFired());
+                    if (!employee.getName().equals(entity.getName()) && nonNull(employee.getName())) {
+                        entity.setName(employee.getName());
+                    }
+                    if (!employee.getEmail().equals(entity.getEmail()) && nonNull(employee.getEmail())) {
+                        entity.setEmail(employee.getEmail());
+                    }
+                    if (!employee.getCountry().equals(entity.getEmail()) && nonNull(employee.getCountry())) {
+                        entity.setCountry(employee.getCountry());
+                    }
+                    if (!employee.getFired().equals(entity.getFired()) && nonNull(employee.getFired())) {
+                        entity.setFired(employee.getFired());
+                    }
+                    log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -172,8 +180,21 @@ public class EmployeeServiceBean implements EmployeeService {
                         .country("Ukraine")
                         .email("ivan@gmail.com")
                         .gender(Gender.M)
+                        .isFired(Boolean.FALSE)
                         .build())
                 .limit(1000)
                 .collect(Collectors.toList()));
+    }
+
+    @Override
+    public void updateOneThousandEntities(Employee employee) {
+        log.info("updateOneThousandEntities(Employee employee) Service - start: employee - {} ", employee);
+        Long start = System.currentTimeMillis();
+        Integer maxId = employeeRepository.findIdWithMaxValue();
+        for (int i = maxId - 999; i <= maxId; ++i) {
+            updateById(i, employee);
+        }
+        Long diff = System.currentTimeMillis() - start;
+        log.info("updateOneKEmployee() Service - emd: method time in ms - {} ", diff);
     }
 }

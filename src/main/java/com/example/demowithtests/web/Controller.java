@@ -144,4 +144,16 @@ public class Controller {
     public void insertOneThousandUsers() {
         employeeService.createOneThousandEntities();
     }
+
+    @PatchMapping("/users/test/patch")
+    @ResponseStatus(HttpStatus.OK)
+    public void patchOneThousandUsers(@RequestBody Employee employee) {
+        employeeService.updateOneThousandEntities(employee);
+    }
+
+    @PutMapping("/users/test/put")
+    @ResponseStatus(HttpStatus.OK)
+    public void putOneThousandUsers(@RequestBody Employee employee) {
+        employeeService.updateOneThousandEntities(employee);
+    }
 }
