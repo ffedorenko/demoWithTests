@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Slf4j
@@ -61,8 +63,8 @@ public class EmployeeServiceBean implements EmployeeService {
 
     public void changeFiredStatus(Employee employee) {
         if (employee.getFired() == null) {
-        employee.setFired(Boolean.FALSE);
-        employeeRepository.save(employee);
+            employee.setFired(Boolean.FALSE);
+            employeeRepository.save(employee);
         }
     }
 
@@ -161,5 +163,17 @@ public class EmployeeServiceBean implements EmployeeService {
                 .findFirst()
                 .orElse("error?");
         return Optional.ofNullable(opt);
+    }
+
+    @Override
+    public void createOneThousandEntities() {
+        employeeRepository.saveAll(Stream.generate(() -> Employee.builder()
+                        .name("Ivan")
+                        .country("Ukraine")
+                        .email("ivan@gmail.com")
+                        .gender(Gender.M)
+                        .build())
+                .limit(1000)
+                .collect(Collectors.toList()));
     }
 }
