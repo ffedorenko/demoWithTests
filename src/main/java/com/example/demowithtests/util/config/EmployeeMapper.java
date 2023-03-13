@@ -2,13 +2,21 @@ package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
-import ma.glasnost.orika.CustomMapper;
-import ma.glasnost.orika.MappingContext;
+import com.example.demowithtests.dto.EmployeeReadDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-public class EmployeeMapper extends CustomMapper<Employee, EmployeeDto> {
+import java.util.List;
 
-    @Override
-    public void mapBtoA(EmployeeDto dto, Employee entity, MappingContext context) {
-        super.mapBtoA(dto, entity, context);
-    }
+@Mapper
+public interface EmployeeMapper {
+    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
+
+    EmployeeDto toEmployeeDto(Employee employee);
+
+    Employee dtoToEmployee(EmployeeDto dto);
+
+    EmployeeReadDto employeeToReadDto(Employee employee);
+
+    List<EmployeeReadDto> toListReadDto(List<Employee> employees);
 }

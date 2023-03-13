@@ -4,7 +4,7 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.util.config.EmployeeConverter;
+import com.example.demowithtests.util.config.EmployeeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,7 +31,6 @@ import java.util.Optional;
 public class Controller {
 
     private final EmployeeService employeeService;
-    private final EmployeeConverter converter;
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
@@ -43,18 +42,15 @@ public class Controller {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
-
-        var employee = converter.getMapperFacade().map(requestForSave, Employee.class);
-        var dto = converter.toDto(employeeService.create(employee));
-
-        return dto;
+        var employee = EmployeeMapper.INSTANCE.dtoToEmployee(requestForSave);
+        return EmployeeMapper.INSTANCE.toEmployeeDto(employeeService.create(employee));
     }
 
     //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getAllUsers() {
-        return employeeService.getAll();
+    public List<EmployeeReadDto> getAllUsers() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getAll());
     }
 
     @GetMapping("/users/p")
@@ -79,7 +75,7 @@ public class Controller {
         log.debug("getEmployeeById() Controller - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() Controller - to dto start: id = {}", id);
-        var dto = converter.toReadDto(employee);
+        var dto = EmployeeMapper.INSTANCE.employeeToReadDto(employee);
         log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
         return dto;
     }
@@ -87,9 +83,9 @@ public class Controller {
     //Обновление юзера
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee refreshEmployee(@PathVariable("id") Integer id, @RequestBody Employee employee) {
-
-        return employeeService.updateById(id, employee);
+    public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto dto) {
+        var employee =  employeeService.updateById(id, EmployeeMapper.INSTANCE.dtoToEmployee(dto));
+        return EmployeeMapper.INSTANCE.toEmployeeDto(employee);
     }
 
     //Удаление по id
