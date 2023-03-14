@@ -5,6 +5,7 @@ import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface EmployeeMapper {
     EmployeeReadDto employeeToReadDto(Employee employee);
 
     List<EmployeeReadDto> toListReadDto(List<Employee> employees);
+
+    default Page<EmployeeDto> toPageDto(Page<Employee> employees) {
+        return employees.map(this::toEmployeeDto);
+    }
+
+    default Page<EmployeeReadDto> toPageReadDto(Page<Employee> employees) {
+        return employees.map(this::employeeToReadDto);
+    }
 }

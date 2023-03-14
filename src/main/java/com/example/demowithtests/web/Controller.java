@@ -1,6 +1,5 @@
 package com.example.demowithtests.web;
 
-import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.dto.EmployeeDto;
 import com.example.demowithtests.dto.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
@@ -55,11 +54,11 @@ public class Controller {
 
     @GetMapping("/users/p")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Employee> getPage(@RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "5") int size
+    public Page<EmployeeReadDto> getPage(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "5") int size
     ) {
         Pageable paging = PageRequest.of(page, size);
-        return employeeService.getAllWithPagination(paging);
+        return EmployeeMapper.INSTANCE.toPageReadDto(employeeService.getAllWithPagination(paging));
     }
 
     //Получения юзера по id
@@ -84,7 +83,7 @@ public class Controller {
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto dto) {
-        var employee =  employeeService.updateById(id, EmployeeMapper.INSTANCE.dtoToEmployee(dto));
+        var employee = employeeService.updateById(id, EmployeeMapper.INSTANCE.dtoToEmployee(dto));
         return EmployeeMapper.INSTANCE.toEmployeeDto(employee);
     }
 
@@ -104,14 +103,13 @@ public class Controller {
 
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Employee> findByCountry(@RequestParam(required = false) String country,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "3") int size,
-                                        @RequestParam(defaultValue = "") List<String> sortList,
-                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
-        //Pageable paging = PageRequest.of(page, size);
-        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
-        return employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
+    public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "3") int size,
+                                           @RequestParam(defaultValue = "") List<String> sortList,
+                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        return EmployeeMapper.INSTANCE.toPageReadDto(
+                employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString()));
     }
 
     @GetMapping("/users/c")
