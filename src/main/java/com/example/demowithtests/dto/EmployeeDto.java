@@ -1,6 +1,7 @@
 package com.example.demowithtests.dto;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.util.annotations.validation.Country;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
@@ -18,6 +19,7 @@ public class EmployeeDto {
     @Schema(description = "Name of an employee.", example = "Billy", required = true)
     public String name;
 
+    @Country
     @Schema(description = "Name of the country.", example = "England", required = true)
     public String country;
 

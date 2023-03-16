@@ -2,6 +2,7 @@ package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.util.annotations.validation.InitNameAnnotation;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import com.example.demowithtests.util.exception.ResourceWasDeletedException;
@@ -27,6 +28,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    @InitNameAnnotation
     @Override
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
@@ -61,11 +63,12 @@ public class EmployeeServiceBean implements EmployeeService {
 
     public void changeFiredStatus(Employee employee) {
         if (employee.getIsFired() == null) {
-        employee.setIsFired(Boolean.FALSE);
-        employeeRepository.save(employee);
+            employee.setIsFired(Boolean.FALSE);
+            employeeRepository.save(employee);
         }
     }
 
+    @InitNameAnnotation
     @Override
     public Employee updateById(Integer id, Employee employee) {
         return employeeRepository.findById(id)
