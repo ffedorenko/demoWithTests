@@ -29,6 +29,10 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Address> addresses = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id")
+    private Set<Photo> photos = new HashSet<>();
+
     @Builder.Default
     private Boolean isFired = Boolean.FALSE;
 
