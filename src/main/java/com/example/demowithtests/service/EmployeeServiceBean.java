@@ -92,7 +92,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         entity.setIsFired(employee.getIsFired());
                     }
                     if (!employee.getPhotos().equals(entity.getPhotos()) && nonNull(employee.getPhotos())) {
-                        entity.setPhotos(employee.getPhotos());
+                        entity.getPhotos().addAll(employee.getPhotos());
                     }
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
                     return employeeRepository.save(entity);
