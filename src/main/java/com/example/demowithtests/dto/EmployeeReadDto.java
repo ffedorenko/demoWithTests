@@ -25,6 +25,7 @@ public class EmployeeReadDto {
     public String email;
 
     public Set<AddressDto> addresses = new HashSet<>();
+    public Set<PhotoDto> photos = new HashSet<>();
 
     //todo: dfhgjkdfhg Jira - 5544
     public Date date = Date.from(Instant.now());

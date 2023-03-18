@@ -20,6 +20,17 @@ spring:
     enabled: true
     #    clean-disabled: true
     baseline-on-migrate: true
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            auth: true
+    host: smtp.gmail.com
+    username: mgoncarov685@gmail.com
+    password: ysdlcfcegnoscidr
+    port: '587'
 #  security:
 #    user:
 #      name: admin

@@ -129,4 +129,10 @@ public class Controller {
     public Optional<String> getAllUsersSo() {
         return employeeService.findEmails();
     }
+
+    @GetMapping("/users/expiredphotos")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EmployeeReadDto> getAllUsersByExpiredPhotos() {
+        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getByExpiredPhotos());
+    }
 }

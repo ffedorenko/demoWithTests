@@ -1,6 +1,7 @@
 package com.example.demowithtests.service;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.Photo;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.util.annotations.validation.InitNameAnnotation;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
@@ -15,11 +16,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 
 @AllArgsConstructor
 @Slf4j
@@ -71,12 +75,25 @@ public class EmployeeServiceBean implements EmployeeService {
     @InitNameAnnotation
     @Override
     public Employee updateById(Integer id, Employee employee) {
+        log.info("updateById(Integer id, Employee employee) Service Start id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    entity.setName(employee.getName());
-                    entity.setEmail(employee.getEmail());
-                    entity.setCountry(employee.getCountry());
-                    entity.setIsFired(employee.getIsFired());
+                    if (!employee.getName().equals(entity.getName()) && nonNull(employee.getName())) {
+                        entity.setName(employee.getName());
+                    }
+                    if (!employee.getEmail().equals(entity.getEmail()) && nonNull(employee.getEmail())) {
+                        entity.setEmail(employee.getEmail());
+                    }
+                    if (!employee.getCountry().equals(entity.getEmail()) && nonNull(employee.getCountry())) {
+                        entity.setCountry(employee.getCountry());
+                    }
+                    if (!employee.getIsFired().equals(entity.getIsFired()) && nonNull(employee.getIsFired())) {
+                        entity.setIsFired(employee.getIsFired());
+                    }
+                    if (!employee.getPhotos().equals(entity.getPhotos()) && nonNull(employee.getPhotos())) {
+                        entity.setPhotos(employee.getPhotos());
+                    }
+                    log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
                     return employeeRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
@@ -164,5 +181,20 @@ public class EmployeeServiceBean implements EmployeeService {
                 .findFirst()
                 .orElse("error?");
         return Optional.ofNullable(opt);
+    }
+
+    @Override
+    public List<Employee> getByExpiredPhotos() {
+        List<Employee> allEmployeeList = getAll();
+        LocalDate fiveYearsOld = LocalDate.now().minusYears(5).plusWeeks(1);
+        List<Employee> expiredPhotoEmployees = new ArrayList<>();
+        for (Employee employee : allEmployeeList) {
+            for (Photo photos : employee.getPhotos()) {
+                if (fiveYearsOld.isAfter(photos.getAddDate())) {
+                    expiredPhotoEmployees.add(employee);
+                }
+            }
+        }
+        return expiredPhotoEmployees;
     }
 }

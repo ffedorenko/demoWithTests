@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "photos")
@@ -18,7 +17,7 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date addDate = Date.from(Instant.now());
+    private LocalDate addDate;
     private String description;
     private String cameraType;
     private String photoUrl;

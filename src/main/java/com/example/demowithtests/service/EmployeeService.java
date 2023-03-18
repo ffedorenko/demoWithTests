@@ -51,4 +51,6 @@ public interface EmployeeService {
 
     Optional<String> findEmails();
 
+    List<Employee> getByExpiredPhotos();
+
 }

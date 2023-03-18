@@ -1,9 +1,9 @@
 package com.example.demowithtests.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class PhotoDto {
-    public Date addDate;
+    public LocalDate addDate = LocalDate.now();
     public String description;
     public String cameraType;
     public String photoUrl;
