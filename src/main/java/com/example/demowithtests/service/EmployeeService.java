@@ -53,4 +53,5 @@ public interface EmployeeService {
 
     List<Employee> getByExpiredPhotos();
 
+    void sendMailToUsersWithExpiredPhotos();
 }

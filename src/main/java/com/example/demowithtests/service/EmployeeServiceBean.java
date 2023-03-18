@@ -31,6 +31,7 @@ import static java.util.Objects.nonNull;
 public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmailService emailService;
 
     @InitNameAnnotation
     @Override
@@ -196,5 +197,12 @@ public class EmployeeServiceBean implements EmployeeService {
             }
         }
         return expiredPhotoEmployees;
+    }
+
+    @Override
+    public void sendMailToUsersWithExpiredPhotos() {
+        List<Employee> expiredPhotoEmployees = getByExpiredPhotos();
+        expiredPhotoEmployees.forEach((employee) -> emailService.sendMessage(employee.getEmail(),
+                "Expired photo", "Please update your photo"));
     }
 }

@@ -130,9 +130,14 @@ public class Controller {
         return employeeService.findEmails();
     }
 
-    @GetMapping("/users/expiredphotos")
+    @GetMapping("/users/getwithexpiredphotos")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getAllUsersByExpiredPhotos() {
         return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getByExpiredPhotos());
+    }
+    @GetMapping("/users/sendmail")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendMail() {
+        employeeService.sendMailToUsersWithExpiredPhotos();
     }
 }
