@@ -5,6 +5,6 @@ import java.time.LocalDate;
 public class PhotoDto {
     public LocalDate addDate = LocalDate.now();
     public String description;
-    public String cameraType;
-    public String photoUrl;
+    public String fileName;
+    public Boolean isDeleted = Boolean.FALSE;
 }

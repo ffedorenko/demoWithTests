@@ -1,6 +1,7 @@
 package com.example.demowithtests.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,13 +13,16 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private LocalDate addDate;
     private String description;
-    private String cameraType;
-    private String photoUrl;
+    private String fileName;
+    private byte[] bytes;
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
 }

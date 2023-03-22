@@ -31,6 +31,10 @@ spring:
     username: mgoncarov685@gmail.com
     password: ysdlcfcegnoscidr
     port: '587'
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
 #  security:
 #    user:
 #      name: admin
