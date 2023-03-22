@@ -29,8 +29,18 @@ public class PhotoServiceBean implements PhotoService {
         if (!Objects.equals(file.getContentType(), "image/jpeg"))
             throw new HttpMediaTypeNotSupportedException("photo must be in jpeg format");
         Employee employee = employeeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Integer newId = 0;
+        for (Photo photo:
+             employee.getPhotos()) {
+            if (newId < photo.getId()) {
+                newId = photo.getId() + 1;
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
         employee.getPhotos().add(Photo.builder()
-                .fileName(StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename())))
+                .fileName(stringBuilder
+                        .append(employee.getName()).append(employee.getId()).append("_photo").append(newId).append(".jpeg").toString())
                 .description(description)
                 .bytes(file.getBytes())
                 .isDeleted(Boolean.FALSE)
