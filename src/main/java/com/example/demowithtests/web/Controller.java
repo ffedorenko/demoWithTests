@@ -30,6 +30,7 @@ import java.util.Optional;
 public class Controller {
 
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
@@ -42,23 +43,25 @@ public class Controller {
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
         var employee = EmployeeMapper.INSTANCE.dtoToEmployee(requestForSave);
-        return EmployeeMapper.INSTANCE.toEmployeeDto(employeeService.create(employee));
+        return employeeMapper.toEmployeeDto(employeeService.create(employee));
     }
 
     //Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getAllUsers() {
-        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getAll());
+        return employeeMapper.toListReadDto(employeeService.getAll());
     }
 
     @GetMapping("/users/p")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> getPage(@RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "5") int size
-    ) {
+                                         @RequestParam(defaultValue = "5") int size) {
+        log.info("getPage() Controller - start: page = {}, size = {}", page, size);
         Pageable paging = PageRequest.of(page, size);
-        return EmployeeMapper.INSTANCE.toPageReadDto(employeeService.getAllWithPagination(paging));
+        Page<EmployeeReadDto> employeeReadDto = employeeMapper.toPageReadDto(employeeService.getAllWithPagination(paging));
+        log.info("getPage() Controller - end: employeeReadDto = {}", employeeReadDto);
+        return employeeReadDto;
     }
 
     //Получения юзера по id
@@ -71,10 +74,10 @@ public class Controller {
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        log.debug("getEmployeeById() Controller - start: id = {}", id);
+        log.info("getEmployeeById() Controller - start: id = {}", id);
         var employee = employeeService.getById(id);
         log.debug("getById() Controller - to dto start: id = {}", id);
-        var dto = EmployeeMapper.INSTANCE.employeeToReadDto(employee);
+        var dto = employeeMapper.employeeToReadDto(employee);
         log.debug("getEmployeeById() Controller - end: name = {}", dto.name);
         return dto;
     }
@@ -84,7 +87,7 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDto refreshEmployee(@PathVariable("id") Integer id, @RequestBody EmployeeDto dto) {
         var employee = employeeService.updateById(id, EmployeeMapper.INSTANCE.dtoToEmployee(dto));
-        return EmployeeMapper.INSTANCE.toEmployeeDto(employee);
+        return employeeMapper.toEmployeeDto(employee);
     }
 
     //Удаление по id
@@ -104,11 +107,11 @@ public class Controller {
     @GetMapping("/users/country")
     @ResponseStatus(HttpStatus.OK)
     public Page<EmployeeReadDto> findByCountry(@RequestParam(required = false) String country,
-                                           @RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "3") int size,
-                                           @RequestParam(defaultValue = "") List<String> sortList,
-                                           @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
-        return EmployeeMapper.INSTANCE.toPageReadDto(
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "3") int size,
+                                               @RequestParam(defaultValue = "") List<String> sortList,
+                                               @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        return employeeMapper.toPageReadDto(
                 employeeService.findByCountryContaining(country, page, size, sortList, sortOrder.toString()));
     }
 
@@ -130,12 +133,13 @@ public class Controller {
         return employeeService.findEmails();
     }
 
-    @GetMapping("/users/getwithexpiredphotos")
+    @GetMapping("/users/expiredphoto/users")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getAllUsersByExpiredPhotos() {
-        return EmployeeMapper.INSTANCE.toListReadDto(employeeService.getByExpiredPhotos());
+        return employeeMapper.toListReadDto(employeeService.getByExpiredPhotos());
     }
-    @GetMapping("/users/sendmail")
+
+    @PostMapping("/users/expiredphoto/mail")
     @ResponseStatus(HttpStatus.OK)
     public void sendMail() {
         employeeService.sendMailToUsersWithExpiredPhotos();

@@ -40,7 +40,8 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
   level:
-    org.springframework: info
+    com.example.demowithtests: info
+    org.springframework: debug
     org.hibernate: debug
 # Server configuration
 server:
