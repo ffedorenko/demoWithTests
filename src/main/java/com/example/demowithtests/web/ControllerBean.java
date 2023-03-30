@@ -1,7 +1,7 @@
 package com.example.demowithtests.web;
 
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.service.EmployeeService;
 import com.example.demowithtests.service.PhotoService;
 import com.example.demowithtests.util.config.EmployeeMapper;

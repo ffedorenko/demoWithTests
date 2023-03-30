@@ -1,8 +1,8 @@
 package com.example.demowithtests.util.config;
 
 import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.dto.EmployeeDto;
-import com.example.demowithtests.dto.EmployeeReadDto;
+import com.example.demowithtests.dto.employee.EmployeeDto;
+import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 

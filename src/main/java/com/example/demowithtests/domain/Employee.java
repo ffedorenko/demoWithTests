@@ -33,6 +33,10 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Photo> photos = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "passport_id", referencedColumnName = "id")
+    private Passport passport;
+
     @Builder.Default
     private Boolean isFired = Boolean.FALSE;
 

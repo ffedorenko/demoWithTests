@@ -1,7 +1,10 @@
-package com.example.demowithtests.dto;
+package com.example.demowithtests.dto.employee;
 
 import com.example.demowithtests.domain.Gender;
+import com.example.demowithtests.dto.PhotoDto;
+import com.example.demowithtests.dto.address.AddressRequest;
 import com.example.demowithtests.util.annotations.validation.Country;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Email;
@@ -12,6 +15,7 @@ import java.util.Set;
 
 public class EmployeeDto {
 
+    @Schema(description = "Id of an employee. DO NOT FILL IN REQUEST", example = "1")
     public Integer id;
 
     @NotNull(message = "Name may not be null")
@@ -28,10 +32,15 @@ public class EmployeeDto {
     @Schema(description = "Email address of an employee.", example = "billys@mail.com", required = true)
     public String email;
 
-    public Set<AddressDto> addresses = new HashSet<>();
+    @Schema(description = "Addresses of an employee.")
+    public Set<AddressRequest> addresses = new HashSet<>();
+
+    @Schema(description = "Photos of employee.")
     public Set<PhotoDto> photos = new HashSet<>();
 
+    @Schema(description = "Gender of an employee.")
     public Gender gender;
 
+    @JsonIgnore
     public Boolean isFired = Boolean.FALSE;
 }
