@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ public class Employee {
     private Integer id;
     @Name
     private String name;
+    private LocalDate dateOfBirthday;
     private String country;
     private String email;
     @OneToMany(cascade = CascadeType.ALL)
@@ -33,8 +35,8 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private Set<Photo> photos = new HashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "passport_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pass_id", referencedColumnName = "id")
     private Passport passport;
 
     @Builder.Default

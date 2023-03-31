@@ -1,4 +1,4 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public interface ControllerSwagger extends Controller {
+public interface EmployeeControllerSwagger extends EmployeeController {
     @Override
     @Operation(summary = "This is endpoint to add a new employee.", description = "Create request to add a new employee.", tags = {"Employee"})
     @ApiResponses(value = {

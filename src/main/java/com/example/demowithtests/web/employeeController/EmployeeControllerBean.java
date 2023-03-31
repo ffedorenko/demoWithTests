@@ -1,10 +1,10 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
-import com.example.demowithtests.service.EmployeeService;
-import com.example.demowithtests.service.PhotoService;
-import com.example.demowithtests.util.config.EmployeeMapper;
+import com.example.demowithtests.service.employee.EmployeeService;
+import com.example.demowithtests.service.photo.PhotoService;
+import com.example.demowithtests.util.config.mapper.EmployeeMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @Tag(name = "Employee", description = "Employee API")
-public class ControllerBean implements ControllerSwagger {
+public class EmployeeControllerBean implements EmployeeControllerSwagger {
 
     private final EmployeeService employeeService;
     private final PhotoService photoService;
@@ -123,13 +123,13 @@ public class ControllerBean implements ControllerSwagger {
         return employeeService.findEmails();
     }
 
-    @GetMapping("/users/expiredphoto/users")
+    @GetMapping("/users/expired-photo/users")
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeReadDto> getAllUsersByExpiredPhotos() {
         return employeeMapper.toListReadDto(employeeService.getByExpiredPhotos());
     }
 
-    @PostMapping("/users/expiredphoto/mail")
+    @PostMapping("/users/expired-photo/mail")
     @ResponseStatus(HttpStatus.OK)
     public void sendMail() {
         employeeService.sendMailToUsersWithExpiredPhotos();
@@ -155,5 +155,19 @@ public class ControllerBean implements ControllerSwagger {
     @ResponseStatus(HttpStatus.OK)
     public void removePhoto(@PathVariable Integer id) {
         photoService.deletePhoto(id);
+    }
+
+    @Override
+    @PostMapping("/users/{id}/passes")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeReadDto addWorkPassToEmployee(@PathVariable("id") Integer employeeId) {
+        return employeeMapper.employeeToReadDto(employeeService.addPassportToEmployee(employeeId));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/pass")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePassFromEmployee(@PathVariable Integer id) {
+        employeeService.deletePassportFromEmployee(id);
     }
 }

@@ -6,10 +6,12 @@ import com.example.demowithtests.dto.address.AddressRequest;
 import com.example.demowithtests.util.annotations.validation.Country;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +24,11 @@ public class EmployeeDto {
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     @Schema(description = "Name of an employee.", example = "Billy", required = true)
     public String name;
+
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(description = "Date of birthday. ISO format", example = "yyyy-MM-dd", required = true)
+    public LocalDate dateOfBirthday;
 
     @Country
     @Schema(description = "Name of the country.", example = "England", required = true)

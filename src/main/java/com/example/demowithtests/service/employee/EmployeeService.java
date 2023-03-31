@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
 import org.springframework.data.domain.Page;
@@ -53,4 +53,8 @@ public interface EmployeeService {
     List<Employee> getByExpiredPhotos();
 
     void sendMailToUsersWithExpiredPhotos();
+
+    Employee addPassportToEmployee(Integer employeeId);
+
+    void deletePassportFromEmployee(Integer id);
 }

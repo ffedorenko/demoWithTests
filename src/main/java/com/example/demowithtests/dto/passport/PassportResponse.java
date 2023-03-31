@@ -1,13 +1,11 @@
 package com.example.demowithtests.dto.passport;
 
-import com.example.demowithtests.domain.Employee;
-
-import java.time.LocalDateTime;
+import com.example.demowithtests.dto.employee.EmployeePassportRead;
+import java.time.LocalDate;
 
 public class PassportResponse {
-    public String firstName;
-    public String secondName;
-    public LocalDateTime dateOfBirthday;
-    private LocalDateTime expireDate;
-    private Employee employee;
+    public String name;
+    public LocalDate dateOfBirthday;
+    public LocalDate expireDate;
+    public EmployeePassportRead employee;
 }

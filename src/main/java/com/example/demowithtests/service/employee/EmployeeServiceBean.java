@@ -1,8 +1,11 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.Passport;
 import com.example.demowithtests.domain.Photo;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.email.EmailService;
+import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.util.annotations.validation.InitNameAnnotation;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -32,6 +35,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmailService emailService;
+    private final PassportService passportService;
 
     @InitNameAnnotation
     @Override
@@ -116,10 +120,6 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeRepository.deleteAll();
     }
 
-    /*@Override
-    public Page<Employee> findByCountryContaining(String country, Pageable pageable) {
-        return employeeRepository.findByCountryContaining(country, pageable);
-    }*/
 
     @Override
     public Page<Employee> findByCountryContaining(String country, int page, int size, List<String> sortList, String sortOrder) {
@@ -150,11 +150,6 @@ public class EmployeeServiceBean implements EmployeeService {
         List<String> countries = employeeList.stream()
                 .map(Employee::getCountry)
                 .collect(Collectors.toList());
-        /*List<String> countries = employeeList.stream()
-                .map(Employee::getCountry)
-                //.sorted(Comparator.naturalOrder())
-                .collect(Collectors.toList());*/
-
         log.info("getAllEmployeeCountry() - end: countries = {}", countries);
         return countries;
     }
@@ -181,7 +176,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 .filter(s -> s.endsWith(".com"))
                 .findFirst()
                 .orElse("error?");
-        return Optional.ofNullable(opt);
+        return Optional.of(opt);
     }
 
     @Override
@@ -204,5 +199,34 @@ public class EmployeeServiceBean implements EmployeeService {
         List<Employee> expiredPhotoEmployees = getByExpiredPhotos();
         expiredPhotoEmployees.forEach((employee) -> emailService.sendMessage(employee.getEmail(),
                 "Expired photo", "Please update your photo"));
+    }
+
+    @Override
+    public Employee addPassportToEmployee(Integer employeeId) {
+        log.info("addPassportToEmployee(Integer employeeId) - start:");
+        Passport passport = passportService.getFree();
+        Employee employeeToUpdate = employeeRepository.findById(employeeId).map((employee) -> {
+            passport.setEmployee(employee);
+            passport.setName(employee.getName());
+            passport.setDateOfBirthday(employee.getDateOfBirthday());
+            passport.setIsFree(Boolean.FALSE);
+            passport.setExpireDate(LocalDate.now().plusYears(5));
+            employee.setPassport(passport);
+            passportService.create(passport);
+            return employee;
+        })
+                .orElseThrow(ResourceNotFoundException::new);
+        log.info("addPassportToEmployee(Integer employeeId) - end: employee = {}", employeeToUpdate);
+        return employeeRepository.save(employeeToUpdate);
+    }
+
+    @Override
+    public void deletePassportFromEmployee(Integer id) {
+        log.info("deletePassportFromEmployee(Integer id) - start:");
+        Employee employeeToUpdate = getById(id);
+        passportService.removeById(employeeToUpdate.getPassport().getId());
+        employeeToUpdate.setPassport(null);
+        log.info("deletePassportFromEmployee(Integer id) - end: employee = {}", employeeToUpdate);
+        employeeRepository.save(employeeToUpdate);
     }
 }

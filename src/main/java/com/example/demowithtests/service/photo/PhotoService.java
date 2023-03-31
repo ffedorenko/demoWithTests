@@ -1,4 +1,4 @@
-package com.example.demowithtests.service;
+package com.example.demowithtests.service.photo;
 
 import com.example.demowithtests.domain.Photo;
 import org.springframework.web.HttpMediaTypeNotSupportedException;

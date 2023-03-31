@@ -1,4 +1,4 @@
-package com.example.demowithtests.web;
+package com.example.demowithtests.web.employeeController;
 
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public interface Controller {
+public interface EmployeeController {
     EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave);
 
     List<EmployeeReadDto> getAllUsers();
@@ -54,4 +54,8 @@ public interface Controller {
     byte[] getPhoto(@PathVariable Integer id);
 
     void removePhoto(@PathVariable Integer id);
+
+    EmployeeReadDto addWorkPassToEmployee(@PathVariable("id") Integer employeeId);
+
+    void deletePassFromEmployee(@PathVariable Integer id);
 }

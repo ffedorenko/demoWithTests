@@ -1,27 +1,35 @@
 package com.example.demowithtests.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "passport")
+@Builder
 public class Passport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String firstName;
-    private String secondName;
-    private LocalDateTime dateOfBirthday;
-    private String serialNumber;
-    private LocalDateTime expireDate;
+    private String name;
+    private LocalDate dateOfBirthday;
+    @Builder.Default
+    private String serialNumber = UUID.randomUUID().toString();
+    private LocalDate expireDate;
+    @Builder.Default
     private Boolean isFree = Boolean.TRUE;
+    @Builder.Default
+    private Boolean isDeleted = Boolean.FALSE;
     @OneToOne(mappedBy = "passport")
+    @JsonIgnore
     private Employee employee;
 }
