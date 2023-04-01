@@ -11,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "passport")
@@ -19,6 +18,7 @@ import java.util.UUID;
 public class Passport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
     private Integer id;
     private String name;
     private LocalDate dateOfBirthday;
