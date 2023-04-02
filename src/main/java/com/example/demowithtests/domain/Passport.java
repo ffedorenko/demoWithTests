@@ -25,6 +25,8 @@ public class Passport {
     @Builder.Default
     private String serialNumber = UUID.randomUUID().toString();
     private LocalDate expireDate;
+    @Enumerated(EnumType.STRING)
+    private PassportStatus passportStatus;
     @Builder.Default
     private Boolean isFree = Boolean.TRUE;
     @Builder.Default
@@ -32,4 +34,6 @@ public class Passport {
     @OneToOne(mappedBy = "passport")
     @JsonIgnore
     private Employee employee;
+    @OneToOne
+    private Passport passport;
 }

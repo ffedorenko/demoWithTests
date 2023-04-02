@@ -1,4 +1,4 @@
-package com.example.demowithtests.web.employeeController;
+package com.example.demowithtests.util.annotations.validation.web.employeeController;
 
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
@@ -81,7 +81,7 @@ public class EmployeeControllerBean implements EmployeeControllerSwagger {
     }
 
     //Удаление по id
-    @PatchMapping("/users/{id}")
+    @DeleteMapping ("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
         employeeService.removeById(id);
@@ -165,7 +165,7 @@ public class EmployeeControllerBean implements EmployeeControllerSwagger {
     }
 
     @Override
-    @PatchMapping("/users/{id}/pass")
+    @DeleteMapping("/users/{id}/pass")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePassFromEmployee(@PathVariable Integer id) {
         employeeService.deletePassportFromEmployee(id);

@@ -13,6 +13,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.nonNull;
+
 @AllArgsConstructor
 @Slf4j
 @Service
@@ -33,10 +35,24 @@ public class PassportServiceBean implements PassportService {
 
     @Override
     public Passport updateById(Integer id, Passport passport) {
+        log.info("updateById(Integer id, Passport passport) - start: id - {}, passport - {}", id, passport);
         return passportRepository.findById(id)
                 .map(newPass -> {
-                    newPass.setName(passport.getName());
-                    newPass.setDateOfBirthday(passport.getDateOfBirthday());
+                    log.info("updateById(Integer id, Passport passport) - mapStart: newPass - {}", newPass);
+                    if (nonNull(passport.getName())
+                            && !passport.getName().equals(newPass.getName())) {
+                        newPass.setName(passport.getName());
+                    }
+                    if (nonNull(passport.getDateOfBirthday())
+                            && !passport.getDateOfBirthday().equals(newPass.getDateOfBirthday())) {
+                        newPass.setDateOfBirthday(passport.getDateOfBirthday());
+                    }
+                    log.info("updateById(Integer id, Passport passport) - middle: before status check");
+                    if (nonNull(passport.getPassportStatus())
+                            && !passport.getPassportStatus().equals(newPass.getPassportStatus())) {
+                        newPass.setPassportStatus(passport.getPassportStatus());
+                    }
+                    log.info("updateById(Integer id, Passport passport) - end: newPass - {}", newPass);
                     return passportRepository.save(newPass);
                 })
                 .orElseThrow(ResourceNotFoundException::new);

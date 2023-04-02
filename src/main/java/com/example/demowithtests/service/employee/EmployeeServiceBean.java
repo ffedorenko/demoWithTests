@@ -83,19 +83,19 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateById(Integer id, Employee employee) Service Start id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    if (!employee.getName().equals(entity.getName()) && nonNull(employee.getName())) {
+                    if (nonNull(employee.getName()) && !employee.getName().equals(entity.getName())) {
                         entity.setName(employee.getName());
                     }
-                    if (!employee.getEmail().equals(entity.getEmail()) && nonNull(employee.getEmail())) {
+                    if (nonNull(employee.getEmail()) && !employee.getEmail().equals(entity.getEmail())) {
                         entity.setEmail(employee.getEmail());
                     }
-                    if (!employee.getCountry().equals(entity.getEmail()) && nonNull(employee.getCountry())) {
+                    if (nonNull(employee.getCountry()) && !employee.getCountry().equals(entity.getEmail())) {
                         entity.setCountry(employee.getCountry());
                     }
-                    if (!employee.getIsFired().equals(entity.getIsFired()) && nonNull(employee.getIsFired())) {
+                    if (nonNull(employee.getIsFired()) && !employee.getIsFired().equals(entity.getIsFired())) {
                         entity.setIsFired(employee.getIsFired());
                     }
-                    if (!employee.getPhotos().equals(entity.getPhotos()) && nonNull(employee.getPhotos())) {
+                    if (nonNull(employee.getPhotos()) && !employee.getPhotos().equals(entity.getPhotos())) {
                         entity.getPhotos().addAll(employee.getPhotos());
                     }
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);

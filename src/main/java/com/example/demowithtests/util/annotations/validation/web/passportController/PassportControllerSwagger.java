@@ -1,4 +1,4 @@
-package com.example.demowithtests.web.passportController;
+package com.example.demowithtests.util.annotations.validation.web.passportController;
 
 import com.example.demowithtests.dto.passport.PassportRequest;
 import com.example.demowithtests.dto.passport.PassportResponse;

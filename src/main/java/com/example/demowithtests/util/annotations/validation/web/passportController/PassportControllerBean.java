@@ -1,4 +1,4 @@
-package com.example.demowithtests.web.passportController;
+package com.example.demowithtests.util.annotations.validation.web.passportController;
 
 import com.example.demowithtests.dto.passport.PassportRequest;
 import com.example.demowithtests.dto.passport.PassportResponse;
@@ -20,7 +20,7 @@ public class PassportControllerBean implements PassportControllerSwagger {
     @Override
     @PostMapping("/passes")
     @ResponseStatus(HttpStatus.CREATED)
-    public PassportResponse createPass(PassportRequest request) {
+    public PassportResponse createPass(@RequestBody PassportRequest request) {
         var passport = passportService.create(passportMapper.toPassport(request));
         return passportMapper.toResponseDto(passport);
     }
@@ -36,7 +36,7 @@ public class PassportControllerBean implements PassportControllerSwagger {
     @Override
     @PutMapping("/passes/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PassportResponse updatePass(@PathVariable Integer id, PassportRequest request) {
+    public PassportResponse updatePass(@PathVariable Integer id, @RequestBody PassportRequest request) {
         var passport = passportService.updateById(id, passportMapper.toPassport(request));
         return passportMapper.toResponseDto(passport);
     }
