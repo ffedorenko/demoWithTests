@@ -2,7 +2,7 @@ package com.example.demowithtests;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.repository.EmployeeRepository;
-import com.example.demowithtests.util.annotations.validation.web.employeeController.EmployeeController;
+import com.example.demowithtests.web.employeeController.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;

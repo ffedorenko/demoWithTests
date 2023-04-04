@@ -2,6 +2,7 @@ package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.Passport;
+import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.domain.Photo;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.email.EmailService;
@@ -210,6 +211,7 @@ public class EmployeeServiceBean implements EmployeeService {
             passport.setName(employee.getName());
             passport.setDateOfBirthday(employee.getDateOfBirthday());
             passport.setIsFree(Boolean.FALSE);
+            passport.setPassportStatus(PassportStatus.ACTIVE);
             passport.setExpireDate(LocalDate.now().plusYears(5));
             employee.setPassport(passport);
             passportService.create(passport);
@@ -218,6 +220,15 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElseThrow(ResourceNotFoundException::new);
         log.info("addPassportToEmployee(Integer employeeId) - end: employee = {}", employeeToUpdate);
         return employeeRepository.save(employeeToUpdate);
+    }
+
+    public Employee updatePassport(Integer employeeId, PassportStatus reason) {
+        log.info("updatePassport(Integer employeeId, PassportStatus reason) - start:");
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(ResourceNotFoundException::new);
+        Passport newPassport = passportService.replacePassport(employee.getPassport(), reason);
+        employee.setPassport(newPassport);
+        log.info("updatePassport(Integer employeeId, PassportStatus reason) - end: employee = {}", employee);
+        return employeeRepository.save(employee);
     }
 
     @Override

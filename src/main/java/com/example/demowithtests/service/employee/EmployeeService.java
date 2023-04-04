@@ -1,6 +1,7 @@
 package com.example.demowithtests.service.employee;
 
 import com.example.demowithtests.domain.Employee;
+import com.example.demowithtests.domain.PassportStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -55,6 +56,7 @@ public interface EmployeeService {
     void sendMailToUsersWithExpiredPhotos();
 
     Employee addPassportToEmployee(Integer employeeId);
+    Employee updatePassport(Integer employeeId, PassportStatus reason);
 
     void deletePassportFromEmployee(Integer id);
 }

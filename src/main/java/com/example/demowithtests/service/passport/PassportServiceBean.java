@@ -1,6 +1,7 @@
 package com.example.demowithtests.service.passport;
 
 import com.example.demowithtests.domain.Passport;
+import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.repository.PassportRepository;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
@@ -8,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,6 +62,33 @@ public class PassportServiceBean implements PassportService {
     }
 
     @Override
+    public Passport replacePassport(Passport passport, PassportStatus reason) {
+        if (passport == null) {
+            return null;
+        }
+        Passport newPassport = Passport.builder()
+                .previousPassport(passport)
+                .employee(passport.getEmployee())
+                .name(passport.getName())
+                .dateOfBirthday(passport.getDateOfBirthday())
+                .expireDate(LocalDate.now().plusYears(5))
+                .passportStatus(PassportStatus.ACTIVE)
+                .build();
+        newPassport.setIsFree(Boolean.FALSE);
+        passport.setPassportStatus(reason);
+        passportRepository.save(passport);
+        return passportRepository.save(newPassport);
+    }
+
+    @Override
+    public List<Passport> showHistory(Integer passportId) {
+        log.info("showHistory(Integer passportId) start: }");
+        var set =  passportRepository.getPassportHistory(passportId);
+        log.info("showHistory(Integer passportId) end: set = {}", set);
+        return set;
+    }
+
+    @Override
     public Passport getById(Integer id) {
         Passport passport = passportRepository.findByIdAndIsDeletedIsFalse(id);
         if (passport == null) throw new ResourceNotAvailableException("Passport was deleted");
@@ -68,9 +98,9 @@ public class PassportServiceBean implements PassportService {
     @Override
     public void createPassports() {
         List<Passport> passportList = Stream.generate(() -> Passport.builder()
-                        .isFree(Boolean.TRUE)
-                        .isDeleted(Boolean.FALSE)
-                        .serialNumber(UUID.randomUUID().toString())
+//                        .isFree(Boolean.TRUE)
+//                        .isDeleted(Boolean.FALSE)
+//                        .serialNumber(UUID.randomUUID().toString())
                         .build())
                 .limit(10)
                 .collect(Collectors.toList());

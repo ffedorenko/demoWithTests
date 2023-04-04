@@ -1,5 +1,6 @@
-package com.example.demowithtests.util.annotations.validation.web.employeeController;
+package com.example.demowithtests.web.employeeController;
 
+import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -104,4 +105,17 @@ public interface EmployeeControllerSwagger extends EmployeeController {
     @Operation(summary = "This is endpoint removes photo with {id}", description = "removes photo", tags = {"Photo"})
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK."))
     void removePhoto(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint adds passport to employee", description = "add passport to employee", tags = {"Employee"})
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK."))
+    EmployeeReadDto addPassportToEmployee(Integer employeeId);
+
+    @Override
+    @Operation(summary = "This is endpoint replace passport for some reason", description = "replace passport for some reason", tags = {"Employee"})
+    EmployeeReadDto getNewPassport(Integer id, PassportStatus reason);
+
+    @Override
+    @Operation(summary = "This is endpoint delete passport", description = "delete passport", tags = {"Employee"})
+    void deletePassFromEmployee(Integer id);
 }

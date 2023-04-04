@@ -1,5 +1,6 @@
 package com.example.demowithtests.dto.passport;
 
+import com.example.demowithtests.domain.Passport;
 import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.dto.employee.EmployeePassportRead;
 import java.time.LocalDate;
@@ -10,5 +11,5 @@ public class PassportResponse {
     public LocalDate expireDate;
     public PassportStatus passportStatus;
     public EmployeePassportRead employee;
-    public Integer previousPassId;
+    public Passport previousPassport;
 }

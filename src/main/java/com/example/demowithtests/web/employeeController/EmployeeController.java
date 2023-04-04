@@ -1,5 +1,6 @@
-package com.example.demowithtests.util.annotations.validation.web.employeeController;
+package com.example.demowithtests.web.employeeController;
 
+import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import org.springframework.data.domain.Page;
@@ -55,7 +56,9 @@ public interface EmployeeController {
 
     void removePhoto(@PathVariable Integer id);
 
-    EmployeeReadDto addWorkPassToEmployee(@PathVariable("id") Integer employeeId);
+    EmployeeReadDto addPassportToEmployee(@PathVariable("id") Integer employeeId);
+
+    EmployeeReadDto getNewPassport(@PathVariable Integer id, @RequestParam PassportStatus reason);
 
     void deletePassFromEmployee(@PathVariable Integer id);
 }

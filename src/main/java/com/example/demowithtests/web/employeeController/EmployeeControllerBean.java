@@ -1,5 +1,6 @@
-package com.example.demowithtests.util.annotations.validation.web.employeeController;
+package com.example.demowithtests.web.employeeController;
 
+import com.example.demowithtests.domain.PassportStatus;
 import com.example.demowithtests.dto.employee.EmployeeDto;
 import com.example.demowithtests.dto.employee.EmployeeReadDto;
 import com.example.demowithtests.service.employee.EmployeeService;
@@ -160,8 +161,15 @@ public class EmployeeControllerBean implements EmployeeControllerSwagger {
     @Override
     @PostMapping("/users/{id}/passes")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeReadDto addWorkPassToEmployee(@PathVariable("id") Integer employeeId) {
+    public EmployeeReadDto addPassportToEmployee(@PathVariable("id") Integer employeeId) {
         return employeeMapper.employeeToReadDto(employeeService.addPassportToEmployee(employeeId));
+    }
+
+    @Override
+    @PatchMapping("/users/{id}/passes/replace")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeReadDto getNewPassport(@PathVariable Integer id, @RequestParam PassportStatus reason) {
+        return employeeMapper.employeeToReadDto(employeeService.updatePassport(id, reason));
     }
 
     @Override

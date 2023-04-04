@@ -1,10 +1,14 @@
-package com.example.demowithtests.util.annotations.validation.web.passportController;
+package com.example.demowithtests.web.passportController;
 
+import com.example.demowithtests.domain.Passport;
 import com.example.demowithtests.dto.passport.PassportRequest;
 import com.example.demowithtests.dto.passport.PassportResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 public interface PassportControllerSwagger extends PassportController {
 
@@ -22,6 +26,11 @@ public interface PassportControllerSwagger extends PassportController {
     @Operation(summary = "This is endpoint updates passport by id", description = "Updates passport by id", tags = {"Passport"})
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK."))
     PassportResponse updatePass(Integer id, PassportRequest request);
+
+    @Override
+    @Operation(summary = "This is endpoint reads history of passport by hierarchical query", description = "Shows history of passport", tags = {"Passport"})
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK."))
+    List<Passport> getHistory(@PathVariable Integer id);
 
     @Override
     @Operation(summary = "This is endpoint marked passport as deleted.", description = "Deletes a passport", tags = {"Passport"})

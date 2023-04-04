@@ -35,5 +35,6 @@ public class Passport {
     @JsonIgnore
     private Employee employee;
     @OneToOne
-    private Passport passport;
+    @JsonIgnore
+    private Passport previousPassport;
 }

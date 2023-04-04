@@ -1,5 +1,6 @@
-package com.example.demowithtests.util.annotations.validation.web.passportController;
+package com.example.demowithtests.web.passportController;
 
+import com.example.demowithtests.domain.Passport;
 import com.example.demowithtests.dto.passport.PassportRequest;
 import com.example.demowithtests.dto.passport.PassportResponse;
 import com.example.demowithtests.service.passport.PassportService;
@@ -8,6 +9,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @RestController
 @AllArgsConstructor
@@ -39,6 +44,12 @@ public class PassportControllerBean implements PassportControllerSwagger {
     public PassportResponse updatePass(@PathVariable Integer id, @RequestBody PassportRequest request) {
         var passport = passportService.updateById(id, passportMapper.toPassport(request));
         return passportMapper.toResponseDto(passport);
+    }
+
+    @GetMapping("/passes/{id}/history")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Passport> getHistory(@PathVariable Integer id) {
+        return passportService.showHistory(id);
     }
 
     @Override
