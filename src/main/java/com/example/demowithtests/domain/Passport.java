@@ -13,7 +13,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "passport")
+@Table(name = "passports")
 @Builder
 public class Passport {
     @Id
