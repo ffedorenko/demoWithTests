@@ -13,11 +13,11 @@ public interface PassportRepository extends JpaRepository<Passport, Integer> {
     Passport findFirstByIsFreeIsTrueAndIsDeletedIsFalse();
 
     @Query(value = "WITH RECURSIVE passports_ AS (\n" +
-            "SELECT * FROM passport\n" +
+            "SELECT * FROM passports\n" +
             "         WHERE id = 14\n" +
             "         UNION ALL SELECT p.*\n" +
-            "                   FROM passport p\n" +
-            "                       INNER JOIN passport p_ ON p.id = p_.previous_passport_id)\n" +
+            "                   FROM passports p\n" +
+            "                       INNER JOIN passports p_ ON p.id = p_.previous_passport_id)\n" +
             "SELECT * FROM passports_;", nativeQuery = true)
     List<Passport> getPassportHistory(Integer id);
 }
