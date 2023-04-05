@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.nonNull;
+import static com.example.demowithtests.util.UniqueFieldChecker.isFieldNew;
 
 @AllArgsConstructor
 @Slf4j
@@ -40,17 +40,14 @@ public class PassportServiceBean implements PassportService {
         return passportRepository.findById(id)
                 .map(newPass -> {
                     log.info("updateById(Integer id, Passport passport) - mapStart: newPass - {}", newPass);
-                    if (nonNull(passport.getName())
-                            && !passport.getName().equals(newPass.getName())) {
+                    if (isFieldNew(passport.getName(), newPass.getName())) {
                         newPass.setName(passport.getName());
                     }
-                    if (nonNull(passport.getDateOfBirthday())
-                            && !passport.getDateOfBirthday().equals(newPass.getDateOfBirthday())) {
+                    if (isFieldNew(passport.getDateOfBirthday(), newPass.getDateOfBirthday())) {
                         newPass.setDateOfBirthday(passport.getDateOfBirthday());
                     }
                     log.info("updateById(Integer id, Passport passport) - middle: before status check");
-                    if (nonNull(passport.getPassportStatus())
-                            && !passport.getPassportStatus().equals(newPass.getPassportStatus())) {
+                    if (isFieldNew(passport.getPassportStatus(), newPass.getPassportStatus())) {
                         newPass.setPassportStatus(passport.getPassportStatus());
                     }
                     log.info("updateById(Integer id, Passport passport) - end: newPass - {}", newPass);

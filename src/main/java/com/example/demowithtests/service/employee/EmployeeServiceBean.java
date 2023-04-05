@@ -1,10 +1,8 @@
 package com.example.demowithtests.service.employee;
 
-import com.example.demowithtests.domain.Employee;
-import com.example.demowithtests.domain.Passport;
-import com.example.demowithtests.domain.PassportStatus;
-import com.example.demowithtests.domain.Photo;
+import com.example.demowithtests.domain.*;
 import com.example.demowithtests.repository.EmployeeRepository;
+import com.example.demowithtests.service.cabinet.CabinetService;
 import com.example.demowithtests.service.email.EmailService;
 import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.util.annotations.validation.InitNameAnnotation;
@@ -27,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.nonNull;
+import static com.example.demowithtests.util.UniqueFieldChecker.isFieldNew;
 
 @AllArgsConstructor
 @Slf4j
@@ -37,6 +35,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmailService emailService;
     private final PassportService passportService;
+    private final CabinetService cabinetService;
 
     @InitNameAnnotation
     @Override
@@ -84,19 +83,19 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("updateById(Integer id, Employee employee) Service Start id - {}, employee - {}", id, employee);
         return employeeRepository.findById(id)
                 .map(entity -> {
-                    if (nonNull(employee.getName()) && !employee.getName().equals(entity.getName())) {
+                    if (isFieldNew(employee.getName(), entity.getName())) {
                         entity.setName(employee.getName());
                     }
-                    if (nonNull(employee.getEmail()) && !employee.getEmail().equals(entity.getEmail())) {
+                    if (isFieldNew(employee.getEmail(), entity.getEmail())) {
                         entity.setEmail(employee.getEmail());
                     }
-                    if (nonNull(employee.getCountry()) && !employee.getCountry().equals(entity.getEmail())) {
+                    if (isFieldNew(employee.getCountry(), entity.getCountry())) {
                         entity.setCountry(employee.getCountry());
                     }
-                    if (nonNull(employee.getIsFired()) && !employee.getIsFired().equals(entity.getIsFired())) {
+                    if (isFieldNew(employee.getIsFired(), entity.getIsFired())) {
                         entity.setIsFired(employee.getIsFired());
                     }
-                    if (nonNull(employee.getPhotos()) && !employee.getPhotos().equals(entity.getPhotos())) {
+                    if (isFieldNew(employee.getPhotos(), entity.getPhotos())) {
                         entity.getPhotos().addAll(employee.getPhotos());
                     }
                     log.info("updateById(Integer id, Employee employee) Service end - entity - {}", entity);
@@ -239,5 +238,21 @@ public class EmployeeServiceBean implements EmployeeService {
         employeeToUpdate.setPassport(null);
         log.info("deletePassportFromEmployee(Integer id) - end: employee = {}", employeeToUpdate);
         employeeRepository.save(employeeToUpdate);
+    }
+
+    @Override
+    public void addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
+        Employee employee = getById(employeeId);
+        Cabinet cabinet = cabinetService.readById(cabinetId);
+        employee.getCabinets().add(cabinet);
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId) {
+        Employee employee = getById(employeeId);
+        Cabinet cabinet = cabinetService.readById(cabinetId);
+        employee.getCabinets().remove(cabinet);
+        employeeRepository.save(employee);
     }
 }

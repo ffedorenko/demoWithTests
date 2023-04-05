@@ -59,4 +59,8 @@ public interface EmployeeService {
     Employee updatePassport(Integer employeeId, PassportStatus reason);
 
     void deletePassportFromEmployee(Integer id);
+
+    void addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
 }
