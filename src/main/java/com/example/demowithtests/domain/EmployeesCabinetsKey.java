@@ -12,6 +12,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EmployeesCabinetsKey implements Serializable {
 
     @Column(name = "employee_id")

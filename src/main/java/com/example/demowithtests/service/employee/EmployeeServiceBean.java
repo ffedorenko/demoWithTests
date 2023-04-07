@@ -4,6 +4,7 @@ import com.example.demowithtests.domain.*;
 import com.example.demowithtests.repository.EmployeeRepository;
 import com.example.demowithtests.service.cabinet.CabinetService;
 import com.example.demowithtests.service.email.EmailService;
+import com.example.demowithtests.service.employeesCabinets.EmployeesCabinetsService;
 import com.example.demowithtests.service.passport.PassportService;
 import com.example.demowithtests.util.annotations.validation.InitNameAnnotation;
 import com.example.demowithtests.util.exception.ResourceNotAvailableException;
@@ -36,6 +37,7 @@ public class EmployeeServiceBean implements EmployeeService {
     private final EmailService emailService;
     private final PassportService passportService;
     private final CabinetService cabinetService;
+    private final EmployeesCabinetsService employeesCabinetsService;
 
     @InitNameAnnotation
     @Override
@@ -244,15 +246,11 @@ public class EmployeeServiceBean implements EmployeeService {
     public void addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
         Employee employee = getById(employeeId);
         Cabinet cabinet = cabinetService.readById(cabinetId);
-        employee.getCabinets().add(cabinet);
-        employeeRepository.save(employee);
+        employeesCabinetsService.createRelation(employee, cabinet);
     }
 
     @Override
     public void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId) {
-        Employee employee = getById(employeeId);
-        Cabinet cabinet = cabinetService.readById(cabinetId);
-        employee.getCabinets().remove(cabinet);
-        employeeRepository.save(employee);
+        employeesCabinetsService.deactivateRelation(employeeId, cabinetId);
     }
 }
