@@ -1,22 +1,29 @@
-create table public.users (
-                              id serial primary key not null,
-                              name character varying,
-                              email character varying,
-                              country character varying,
-                              is_deleted boolean
-);
-create unique index users_id_uindex on users using btree (id);
-
-create table public.addresses (
-                                  id bigserial primary key not null,
-                                  address_has_active boolean,
-                                  city character varying(255),
-                                  country character varying(255),
-                                  street character varying(255),
-                                  employee_id integer,
-                                  foreign key (employee_id) references public.users (id)
-                                      match simple on update no action on delete no action
+create table users
+(
+    id               serial
+        primary key,
+    name             varchar,
+    email            varchar,
+    country          varchar,
+    gender           varchar,
+    is_fired         boolean,
+    pass_id          integer
+        constraint fkn962la30qstmkv3hvsyraf5xd
+            references passports,
+    date_of_birthday date
 );
 
+create unique index users_id_uindex
+    on users (id);
 
-
+create table addresses
+(
+    id                 bigserial
+        primary key,
+    address_has_active boolean,
+    city               varchar(255),
+    country            varchar(255),
+    street             varchar(255),
+    employee_id        integer
+        references users
+);

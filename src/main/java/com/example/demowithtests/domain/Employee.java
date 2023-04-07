@@ -45,6 +45,6 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToMany
-    private Set<Cabinet> cabinets;
+    @OneToMany(mappedBy = "employee")
+    private Set<EmployeesCabinets> employeesCabinets;
 }

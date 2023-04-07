@@ -21,6 +21,6 @@ public class Cabinet {
     private Integer capacity;
     @Builder.Default
     private Boolean isDeleted = Boolean.FALSE;
-    @ManyToMany(mappedBy = "cabinets")
-    private Set<Employee> employees;
+    @OneToMany(mappedBy = "cabinet")
+    private Set<EmployeesCabinets> employeesCabinets;
 }
