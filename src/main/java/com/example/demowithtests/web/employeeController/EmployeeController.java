@@ -61,4 +61,10 @@ public interface EmployeeController {
     EmployeeReadDto getNewPassport(@PathVariable Integer id, @RequestParam PassportStatus reason);
 
     void deletePassFromEmployee(@PathVariable Integer id);
+
+    EmployeeReadDto addEmployeeToCabinet(@PathVariable("e_id") Integer employeeId,
+                                         @PathVariable("c_id") Integer cabinetId);
+
+    void removeEmployeeFromCabinet(@PathVariable("e_id") Integer employeeId,
+                                   @PathVariable("c_id") Integer cabinetId);
 }

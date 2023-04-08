@@ -82,7 +82,7 @@ public class EmployeeControllerBean implements EmployeeControllerSwagger {
     }
 
     //Удаление по id
-    @DeleteMapping ("/users/{id}")
+    @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployeeById(@PathVariable Integer id) {
         employeeService.removeById(id);
@@ -177,5 +177,21 @@ public class EmployeeControllerBean implements EmployeeControllerSwagger {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePassFromEmployee(@PathVariable Integer id) {
         employeeService.deletePassportFromEmployee(id);
+    }
+
+    @Override
+    @PostMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeReadDto addEmployeeToCabinet(@PathVariable("e_id") Integer employeeId,
+                                                @PathVariable("c_id") Integer cabinetId) {
+        return employeeMapper.employeeToReadDto(employeeService.addEmployeeToCabinet(employeeId, cabinetId));
+    }
+
+    @Override
+    @DeleteMapping("/users/{e_id}/cabinets/{c_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeEmployeeFromCabinet(@PathVariable("e_id") Integer employeeId,
+                                          @PathVariable("c_id") Integer cabinetId) {
+        employeeService.removeEmployeeFromCabinet(employeeId, cabinetId);
     }
 }

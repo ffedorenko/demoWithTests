@@ -60,7 +60,7 @@ public interface EmployeeService {
 
     void deletePassportFromEmployee(Integer id);
 
-    void addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+    Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
 
     void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
 }

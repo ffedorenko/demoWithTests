@@ -118,4 +118,12 @@ public interface EmployeeControllerSwagger extends EmployeeController {
     @Override
     @Operation(summary = "This is endpoint delete passport", description = "delete passport", tags = {"Employee"})
     void deletePassFromEmployee(Integer id);
+
+    @Override
+    @Operation(summary = "This is endpoint adds employee to cabinet", description = "Adds employee to cabinet", tags = {"Employee"})
+    EmployeeReadDto addEmployeeToCabinet(Integer employeeId, Integer cabinetId);
+
+    @Override
+    @Operation(summary = "This is endpoint removes employee from cabinet", description = "Removes employee from cabinet", tags = {"Employee"})
+    void removeEmployeeFromCabinet(Integer employeeId, Integer cabinetId);
 }

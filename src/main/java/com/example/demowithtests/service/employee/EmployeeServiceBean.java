@@ -243,10 +243,11 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public void addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
+    public Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
         Employee employee = getById(employeeId);
         Cabinet cabinet = cabinetService.readById(cabinetId);
         employeesCabinetsService.createRelation(employee, cabinet);
+        return getById(employeeId);
     }
 
     @Override
