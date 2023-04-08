@@ -1,5 +1,6 @@
 package com.example.demowithtests.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,17 +12,22 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class EmployeesCabinets {
 
     @EmbeddedId
-    private EmployeesCabinetsKey id;
+    private EmployeesCabinetsKey id = new EmployeesCabinetsKey();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
     @MapsId("employeeId")
+    @JsonIgnore
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "cabinet_id")
     @MapsId("cabinetId")
+    @JsonIgnore
     private Cabinet cabinet;
 
     private Boolean isActive = Boolean.TRUE;

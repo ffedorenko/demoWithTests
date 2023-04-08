@@ -22,5 +22,6 @@ public class Cabinet {
     @Builder.Default
     private Boolean isDeleted = Boolean.FALSE;
     @OneToMany(mappedBy = "cabinet")
+    @EqualsAndHashCode.Exclude
     private Set<EmployeesCabinets> employeesCabinets;
 }

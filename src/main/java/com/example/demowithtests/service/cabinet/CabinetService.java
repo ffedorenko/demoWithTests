@@ -7,4 +7,5 @@ public interface CabinetService {
     Cabinet readById(Integer id);
     Cabinet updateById(Integer id, Cabinet cabinet);
     void deleteById(Integer id);
+    Boolean checkCabinet(Integer cabinetId);
 }

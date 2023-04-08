@@ -208,16 +208,16 @@ public class EmployeeServiceBean implements EmployeeService {
         log.info("addPassportToEmployee(Integer employeeId) - start:");
         Passport passport = passportService.getFree();
         Employee employeeToUpdate = employeeRepository.findById(employeeId).map((employee) -> {
-            passport.setEmployee(employee);
-            passport.setName(employee.getName());
-            passport.setDateOfBirthday(employee.getDateOfBirthday());
-            passport.setIsFree(Boolean.FALSE);
-            passport.setPassportStatus(PassportStatus.ACTIVE);
-            passport.setExpireDate(LocalDate.now().plusYears(5));
-            employee.setPassport(passport);
-            passportService.create(passport);
-            return employee;
-        })
+                    passport.setEmployee(employee);
+                    passport.setName(employee.getName());
+                    passport.setDateOfBirthday(employee.getDateOfBirthday());
+                    passport.setIsFree(Boolean.FALSE);
+                    passport.setPassportStatus(PassportStatus.ACTIVE);
+                    passport.setExpireDate(LocalDate.now().plusYears(5));
+                    employee.setPassport(passport);
+                    passportService.create(passport);
+                    return employee;
+                })
                 .orElseThrow(ResourceNotFoundException::new);
         log.info("addPassportToEmployee(Integer employeeId) - end: employee = {}", employeeToUpdate);
         return employeeRepository.save(employeeToUpdate);
@@ -244,10 +244,13 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Employee addEmployeeToCabinet(Integer employeeId, Integer cabinetId) {
+        log.info("addEmployeeToCabinet(Integer employeeId, Integer cabinetId) - start:");
         Employee employee = getById(employeeId);
         Cabinet cabinet = cabinetService.readById(cabinetId);
         employeesCabinetsService.createRelation(employee, cabinet);
-        return getById(employeeId);
+        Employee result = getById(employeeId);
+        log.info("addEmployeeToCabinet(Integer employeeId, Integer cabinetId) - end: result = {}", result);
+        return result;
     }
 
     @Override

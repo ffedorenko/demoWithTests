@@ -5,6 +5,8 @@ import com.example.demowithtests.domain.Employee;
 import com.example.demowithtests.domain.EmployeesCabinets;
 import com.example.demowithtests.domain.EmployeesCabinetsKey;
 import com.example.demowithtests.repository.EmployeesCabinetsRepository;
+import com.example.demowithtests.service.cabinet.CabinetService;
+import com.example.demowithtests.util.exception.CabinetIsFullException;
 import com.example.demowithtests.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeesCabinetsServiceBean implements EmployeesCabinetsService {
     private final EmployeesCabinetsRepository repository;
+    private final CabinetService cabinetService;
 
     @Override
     public EmployeesCabinets createRelation(Employee employee, Cabinet cabinet) {
         EmployeesCabinets relation = getRelation(employee.getId(), cabinet.getId());
+        if (!cabinetService.checkCabinet(cabinet.getId())) {
+            throw new CabinetIsFullException("Cabinet is full for now. Choose another cabinet.");
+        }
         if (relation != null) {
             relation.setIsActive(Boolean.TRUE);
         } else {

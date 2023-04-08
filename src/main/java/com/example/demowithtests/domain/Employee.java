@@ -46,5 +46,6 @@ public class Employee {
     private Gender gender;
 
     @OneToMany(mappedBy = "employee")
+    @EqualsAndHashCode.Exclude
     private Set<EmployeesCabinets> employeesCabinets;
 }

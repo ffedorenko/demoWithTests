@@ -1,9 +1,9 @@
 package com.example.demowithtests.dto.employee;
 
+import com.example.demowithtests.domain.EmployeesCabinets;
 import com.example.demowithtests.domain.Gender;
 import com.example.demowithtests.dto.PhotoDto;
 import com.example.demowithtests.dto.address.AddressResponse;
-import com.example.demowithtests.dto.cabinet.CabinetResponse;
 import com.example.demowithtests.dto.passport.PassportRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -38,5 +38,5 @@ public class EmployeeReadDto {
     public PassportRequest passport;
 
     @Schema(description = "Cabinets of employee")
-    public Set<CabinetResponse> cabinets = new HashSet<>();
+    public Set<EmployeesCabinets> employeesCabinets;
 }

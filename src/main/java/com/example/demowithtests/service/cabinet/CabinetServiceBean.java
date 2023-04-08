@@ -39,7 +39,7 @@ public class CabinetServiceBean implements CabinetService {
                         entity.setCapacity(cabinet.getCapacity());
                     }
                     log.info("updateById(Integer id, Cabinet cabinet) Service end, entity - {}", entity);
-                    return entity;
+                    return cabinetRepository.save(entity);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Cabinet not found with id = " + id));
     }
@@ -50,5 +50,13 @@ public class CabinetServiceBean implements CabinetService {
                 .orElseThrow(() -> new EntityNotFoundException("Cabinet not found with id = " + id));
         cabinet.setIsDeleted(Boolean.TRUE);
         cabinetRepository.save(cabinet);
+    }
+
+    public Boolean checkCabinet(Integer cabinetId) {
+        Cabinet cabinet = readById(cabinetId);
+        return cabinet.getEmployeesCabinets()
+                .stream()
+                .filter((relation) -> relation.getIsActive().equals(Boolean.TRUE))
+                .count() < cabinet.getCapacity();
     }
 }
