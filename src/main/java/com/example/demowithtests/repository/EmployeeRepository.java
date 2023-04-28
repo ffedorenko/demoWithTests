@@ -25,6 +25,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByCountryContainingAndIsFiredIsFalse(String country, Pageable pageable);
 
-    @Query(value = "SELECT MAX(id) FROM database_test.public.users", nativeQuery = true)
+    @Query(value = "SELECT MAX(id) FROM public.users", nativeQuery = true)
     Integer findIdWithMaxValue();
 }

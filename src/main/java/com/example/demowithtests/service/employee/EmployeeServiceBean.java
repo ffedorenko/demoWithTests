@@ -112,9 +112,8 @@ public class EmployeeServiceBean implements EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 // .orElseThrow(() -> new EntityNotFoundException("Employee not found with id = " + id));
                 .orElseThrow(ResourceWasDeletedException::new);
-        //employee.setIsDeleted(true);
-        employeeRepository.delete(employee);
-        //repository.save(employee);
+        employee.setIsFired(Boolean.TRUE);
+        employeeRepository.save(employee);
     }
 
     @Override
@@ -219,7 +218,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     return employee;
                 })
                 .orElseThrow(ResourceNotFoundException::new);
-        log.info("addPassportToEmployee(Integer employeeId) - end: employee = {}", employeeToUpdate);
+        log.info("addPassportToEmployee(Integer employeeId) - end:");
         return employeeRepository.save(employeeToUpdate);
     }
 

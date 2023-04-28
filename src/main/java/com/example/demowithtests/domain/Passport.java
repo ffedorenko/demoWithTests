@@ -33,8 +33,10 @@ public class Passport {
     private Boolean isDeleted = Boolean.FALSE;
     @OneToOne(mappedBy = "passport")
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Employee employee;
     @OneToOne
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Passport previousPassport;
 }

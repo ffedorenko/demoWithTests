@@ -27,12 +27,15 @@ public class Employee {
     private LocalDate dateOfBirthday;
     private String country;
     private String email;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
+    @EqualsAndHashCode.Exclude
     private Set<Address> addresses = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id")
+    @EqualsAndHashCode.Exclude
     private Set<Photo> photos = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -47,5 +50,5 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     @EqualsAndHashCode.Exclude
-    private Set<EmployeesCabinets> employeesCabinets;
+    private Set<EmployeesCabinets> employeesCabinets = new HashSet<>();
 }
