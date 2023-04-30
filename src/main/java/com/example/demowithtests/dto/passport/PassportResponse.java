@@ -6,6 +6,7 @@ import com.example.demowithtests.dto.employee.EmployeePassportRead;
 import java.time.LocalDate;
 
 public class PassportResponse {
+    public Integer id;
     public String name;
     public LocalDate dateOfBirthday;
     public LocalDate expireDate;
