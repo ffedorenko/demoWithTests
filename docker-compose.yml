@@ -1,0 +1,46 @@
+version: '3'
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_volume:
+
+services:
+
+  app-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: "app-server"
+    networks:
+      - backend
+    links:
+      - "postgres"
+    healthcheck:
+      test: "curl --fail http://localhost:8087/healthcheck || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    ports:
+      - "8081:8081"
+
+  postgres:
+    image: "postgres:15.2"
+    container_name: "postgres"
+    networks:
+      - backend
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=postgres"
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: "pg_isready -U postgres"
+      interval: 1m
+      timeout: 10s
+      retries: 5
