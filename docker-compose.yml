@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 networks:
   backend:
@@ -10,37 +10,43 @@ volumes:
 services:
 
   app-server:
+    image: "demo-with-tests:latest"
     build:
       context: ./
       dockerfile: Dockerfile
     container_name: "app-server"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
     networks:
       - backend
     links:
       - "postgres"
+    depends_on:
+      - postgres
     healthcheck:
       test: "curl --fail http://localhost:8087/healthcheck || exit 1"
       interval: 1m
       timeout: 10s
       retries: 5
     ports:
-      - "8081:8081"
+      - "8087:8087"
 
   postgres:
     image: "postgres:15.2"
     container_name: "postgres"
+    restart: always
     networks:
       - backend
     environment:
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_PASSWORD=postgres"
-      - "POSTGRES_DB=postgres"
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     volumes:
       - postgres_volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: "pg_isready -U postgres"
+      test: pg_isready
       interval: 1m
       timeout: 10s
       retries: 5
